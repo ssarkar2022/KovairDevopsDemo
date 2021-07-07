@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+		
+		<project xmlns:sonar="antlib:org.sonar.ant" name="kovairnewdevops" default="all" basedir=".">
+		<property environment="env"/>
+		<!--property name="ECLIPSE_HOME" value="C:\Tools\eclipse-jee-2021-03-R-win32-x86_64\eclipse"/-->
+		<property name="junit.output.dir" value="junit"/>
+		<property name="debuglevel" value="source,lines,vars"/>
+		<property name="target" value="1.8"/>
+		<property name="source" value="1.8"/>
+		<property name="src.dir" value="src"/>
+		<property name="build.dir" value="target"/>
+		<property name="classes.dir" value="${build.dir}/classes"/>
+		
+		<!-- Define the Sonar properties -->
+		
+		<property name="sonar.host.url" value="https://sonarcloud.io"/>
+		<property name="sonar.projectKey" value="kovairdemoapp"/>
+		<property name="sonar.projectName" value="kovairdemoapp"/>
+		<property name="sonar.projectVersion" value="1.0"/>
+		<property name="sonar.organization" value="StandardDemo"/>
+		<property name="sonar.login" value="9992fda7591bce4b585dced826326f2eae85bd6c"/>
+		<property name="sonar.language" value="java"/>
+		<property name="sonar.sources" value="src"/>
+		<property name="sonar.java.binaries" value="target"/>
+		<property name="sonar.sourceEncoding" value="UTF-8"/>
+		
+		<target name="clean">
+			<delete dir="${build.dir}"/>
+		</target>
+		
+		<target name="init">
+			<mkdir dir="${build.dir}"/>
+			<mkdir dir="${classes.dir}"/>
+		</target>
+		
+		<target name="compile" depends="init">
+		
+			<javac target="${target}" source="${source}" includeantruntime="false" destdir="bin" debuglevel="${debuglevel}" debug="true">
+				<src path="src"/>
+			</javac>
+		</target>
+		
+		<target name="sonar" depends="compile">
+			<taskdef resource="org/sonar/ant/antlib.xml" uri="antlib:org.sonar.ant">
+		
+				<!-- Update the following line, or put the "sonar-ant-task-*.jar" file in your "$HOME/.ant/lib" folder -->
+				<classpath path="sonarqube-ant-task-2.7.0.1612.jar"/>
+			</taskdef>
+		
+			<!-- Execute Sonar -->
+			<sonar:sonar/>
+			<!--sonarns:sonar xmlns:sonarns="antlib:org.sonar.ant" /-->
+		</target>
+		
+	<target name="jar" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run" depends="jar">
+        <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
+    </target>
+
+		
+<!-- ========= The main target "all" ========= -->
+		
+	<target name="all" depends="clean,compile,sonar"/>
+	</project>

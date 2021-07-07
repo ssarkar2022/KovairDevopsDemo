@@ -1,0 +1,34 @@
+def microsoftteamsrecipientwebhookurl = 'https://outlook.office.com/webhook/bec5e87a-b2b3-48c4-994f-75f450422293@3cd788f0-4406-4d04-afa9-b28bca6e0b21/JenkinsCI/4de75f08e14245fa9f825911c42c4460/9eab3e39-3de4-4dbc-999f-94520f178250'
+pipeline
+{
+	agent { label 'Tomcat Agent' }
+	stages
+	{
+		stage('Revert Build')
+		{
+			steps
+			{
+				echo '*******Deploy the last stable build*********'
+				
+				sh '''
+					cd /home/kovair/stablewarrepo
+					git pull origin master
+					cp /home/kovair/stablewarrepo/KovairDevOpsDemoApp_Puppet_stable.war /usr/share/tomcat/webapps/KovairDevOpsDemoApp_Puppet.war
+				   '''
+				
+				
+			}
+			post
+			{
+				success
+				{
+					office365ConnectorSend message: "Successfully Reverted the Build through puppet", status: 'Success', webhookUrl: '${microsoftteamsrecipientwebhookurl}'
+				}
+				failure
+				{
+					office365ConnectorSend message: "Cannot Revert the build", status: 'Failed', webhookUrl: '${microsoftteamsrecipientwebhookurl}'
+				}
+			}
+		}
+	}
+}

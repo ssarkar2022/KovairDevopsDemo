@@ -1,0 +1,184 @@
+def istoarchive = 'FALSE'
+def microsoftteamsrecipientwebhookurl = 'https://outlook.office.com/webhook/bec5e87a-b2b3-48c4-994f-75f450422293@3cd788f0-4406-4d04-afa9-b28bca6e0b21/JenkinsCI/4de75f08e14245fa9f825911c42c4460/9eab3e39-3de4-4dbc-999f-94520f178250'
+pipeline
+{
+	agent none
+	stages
+	{
+		stage('CheckOut and Build The Application')
+		{
+			agent { label 'master' }
+			
+			steps
+			{
+				script
+				{
+                    def mvn_version = 'maven_3_5_4'
+					withEnv( ["PATH+MAVEN=${tool mvn_version}/bin"] ) {
+					  sh "mvn clean install"
+					}
+                }
+			}
+			
+			post
+			{ 
+				success 
+				{
+					echo 'Copying the war file and pushing to War Repo'
+					sh 'cp target/*.war /home/kovair/ApplicationWar/'
+					//echo '************ Pushing the war files to ssh://kovair@192.168.11.90:22/home/kovair/MyGitFiles/WarRepository.git ************' 
+				    sh '''
+				        cd /home/kovair/ApplicationWar/
+				        git pull origin master
+						git add .
+						git commit -m "War updated."
+						git push origin master
+					'''
+				}
+				
+				failure
+				{
+					script
+					{
+						office365ConnectorSend message: "Build Failed", status: 'Failed', webhookUrl: '${microsoftteamsrecipientwebhookurl}'
+					}
+				}
+			}
+			
+		}
+		
+		stage('Deploy Application on Tomcat')
+		{
+			agent { label 'master' }
+			steps
+			{
+				echo 'Deploying the files to Deployment server using Chef'
+				sh '''
+				    cd /home/kovair/chef-repo/cookbooks
+					knife bootstrap 192.168.11.175 -x kovair -P kovair@123 --sudo --node-name nodeVMDeploy --run-list "recipe[deploy_to_vm]" -y
+				'''
+			}
+			post
+			{
+				success
+				{
+					script
+					{
+						office365ConnectorSend message: "Deployed successfully to Test server", status: 'Success', webhookUrl: '${microsoftteamsrecipientwebhookurl}'
+					}
+				}
+			}
+		}
+		
+		stage('Test Application with Robot Framework')
+		{
+			agent { label 'testnode' }
+			steps
+			{
+			    sleep(time:10,unit:"SECONDS")
+				echo 'Starting robot tests'
+				script
+				{
+					dir('RobotTests')
+					{
+						sh '''robot -v START_URL:http://192.168.11.175:8080/KovairDevOpsDemoApp_Chef/ -d Results Tests/KovairDevOpsDemoApp.robot'''
+
+					}
+					step([$class: 'RobotPublisher', 
+		            disableArchiveOutput: false, 
+		            enableCache: true, 
+		            logFileName: 'log.html', 
+		            onlyCritical: true, 
+		            otherFiles: '', 
+		            outputFileName: 'output.xml', 
+		            outputPath: 'RobotTests/Results', 
+		            passThreshold: 100.0, 
+		            reportFileName: 'report.html', 
+		            unstableThreshold: 100.0])
+				}
+				
+			}
+			post
+			{
+				success
+				{
+					script
+					{
+						istoarchive = 'TRUE'
+						office365ConnectorSend message: "Robot Testing is successful for the application with URL: <a href='http://192.168.11.175:8080/KovairDevOpsDemoApp_Chef/'>http://192.168.11.175:8080/KovairDevOpsDemoApp_Chef/</a> ", status: 'Success', webhookUrl: '${microsoftteamsrecipientwebhookurl}'
+					} 
+				}
+				failure
+				{
+					sh '''
+					    cd /home/kovair/chef-repo/cookbooks
+						knife bootstrap 192.168.11.175 -x kovair -P kovair@123 --sudo --node-name nodeVMStableDeploy --run-list 'recipe[deploy_to_vmstable]' -y
+					'''
+					office365ConnectorSend message: "Robot Tests failed for the application with Url: <a href='http://192.168.11.175:8080/KovairDevOpsDemoApp_Chef/'>http://192.168.11.175:8080/KovairDevOpsDemoApp_Chef/</a> Last build reverted successfully", status: 'Failed', webhookUrl: '${microsoftteamsrecipientwebhookurl}'
+				}
+			}
+			
+		}
+		
+		stage('Archive Artifacts to Git Repository')
+		{
+			agent { label 'Tomcat Agent' }
+			when
+			{
+				beforeAgent true
+				expression 
+				{
+					return istoarchive != 'FALSE';
+				}
+			}
+			steps
+			{
+				sh '''
+					cd /usr/share/tomcat/webapps
+					cp /usr/share/tomcat/webapps/KovairDevOpsDemoApp_Chef.war /home/kovair/gitWarRepo/KovairDevOpsDemoApp_Chef_stable.war
+					cd /home/kovair/gitWarRepo
+					git pull origin master
+					git add KovairDevOpsDemoApp_Chef_stable.war
+					git commit -m "War archived to repository"
+				    git push origin master
+				'''
+			}
+			post
+			{
+				success
+				{
+					script
+					{
+						def recipient = 'https://outlook.office.com/webhook/bec5e87a-b2b3-48c4-994f-75f450422293@3cd788f0-4406-4d04-afa9-b28bca6e0b21/JenkinsCI/4de75f08e14245fa9f825911c42c4460/9eab3e39-3de4-4dbc-999f-94520f178250'
+						office365ConnectorSend message: "War file archived successfully to Git", status: 'Success', webhookUrl: '${recipient}'
+					}
+				}
+			}
+			
+		}
+		stage('Deploy and Run Application on Docker')
+		{
+			agent { label 'master' }
+			steps
+			{
+				    echo 'Deploying the war file in Docker using Chef'
+				    sh '''
+				        cd /home/kovair/chef-repo/cookbooks
+				    	knife bootstrap 192.168.11.109 -x kovair -P kovair@123 --sudo --node-name nodeDockerDeploy --run-list "recipe[deploy_to_docker]" -y
+				    '''
+		    }
+			post
+			{
+				success
+				{
+					script
+					{
+						def recipient = 'https://outlook.office.com/webhook/bec5e87a-b2b3-48c4-994f-75f450422293@3cd788f0-4406-4d04-afa9-b28bca6e0b21/JenkinsCI/4de75f08e14245fa9f825911c42c4460/9eab3e39-3de4-4dbc-999f-94520f178250'
+			
+						office365ConnectorSend message: "Application successfully deployed to Docker. Docker Url: <a href='http://192.168.11.109:8888/KovairDevOpsDemoApp_Chef'>http://192.168.11.109:8888/KovairDevOpsDemoApp_Chef/</a> ", status: 'Success', webhookUrl: '${recipient}'
+					}
+				}
+			}
+		}		
+	}
+}

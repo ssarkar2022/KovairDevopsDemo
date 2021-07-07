@@ -1,0 +1,100 @@
+﻿body {
+}
+
+.header-content {
+    background-color: #ACD6F7;
+    color: #333333;
+    font-weight: bold;
+}
+
+.myHeading {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.linkIconSpan {
+    text-align: right;
+    float: right;
+    margin-right: 5px;
+}
+
+.basicInfo {
+    font-family: 'Courier New' , Courier, monospace;
+    font-size: 16px;
+    color: #3C3C3C;
+    float: left;
+}
+
+.empNameHeading {
+    font-size: 20px;
+    color: #460762;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.separateWell {
+    margin-top: 3px;
+}
+.vr {
+    display: inline;
+    height: 100%;
+    width: 1px;
+    margin: 5px;
+    float:left;
+    border-right-style: inset;
+    border-right-width: 2px;
+    border-right-color: #333333;
+}
+#subordinate-details-div {
+    font-size: 14px;
+    font-weight: bold;
+}
+#Leave-Basic-Div {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.x-column-header-inner .x-column-header-text
+        {
+            font-weight:bold;
+        }
+        .x-grid-row
+        {
+            height: 28px;
+        }
+        
+        .x-column-header-over .x-column-header-trigger, .x-column-header-open .x-column-header-trigger
+        {
+            display: none !important;
+        }
+        .x-column-header
+        {
+            border-right: 0px;
+            height: 30px;
+        }
+        .x-grid-body
+        {
+            border-top: 0px;
+            border-bottom: 0px;
+        }
+        .x-grid-header-ct.x-docked.x-grid-header-ct-default.x-docked-top.x-grid-header-ct-docked-top.x-grid-header-ct-default-docked-top.x-box-layout-ct
+        {
+            border-top-width: 1px !important;
+            border-top-color: #DBDBDB !important;
+        }
+        
+        
+        /*.x-column-header-inner.x-column-header-over
+        {
+            background-image: none !important;
+            background-color: #EEEFF0 !important;
+        }
+        .x-column-header-inner
+        {
+            background-image: none !important;
+            background-color: #EEEFF0 !important;
+        }
+        .x-column-header-trigger
+        {
+            background-color: #EEEFF0 !important;
+        }*/
