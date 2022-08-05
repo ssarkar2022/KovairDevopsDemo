@@ -42,13 +42,13 @@ devOpsService.factory('devOpsService', function ($http) {
            	        "Date of Joining": "01/08/2010",
            	        "Department": "Omnibus Developement"
            	    },
-           	    {
+           	   /* {
            	        "First Name": "Somesh",
            	        "Last Name": "Roy",
            	        "Company": "Kovair",
            	        "Date of Joining": "01/08/2005",
            	        "Department": "Omnibus Developement"
-           	    },
+           	    },*/
            	    {
            	        "First Name": "Alexa",
            	        "Last Name": "Galcanvos",
