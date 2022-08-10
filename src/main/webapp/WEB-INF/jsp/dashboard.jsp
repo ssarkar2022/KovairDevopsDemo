@@ -58,16 +58,16 @@
 		                                <img src="images/FemaleUser.jpg" id="EmpDashboardImg" class="img-rounded" alt="Image" width="150" height="150" />
 		                            </div>
 		                            <div id="emp-basic-info" class="col-sm-8 basicInfo">
-		                                <h2 class="empNameHeading">Patty Brown</h2>
+		                                <h2 class="empNameHeading">Scott Allen</h2>
 		                                Designation : Software Engineer
 		                                <br />
 		                                Date of Joining : Delivery
 		                                <br />
-		                                Supervisor : Antoniyo Goncalvos
+		                                Supervisor : Somesh Roy
 		                                <br />
 		                                Contact No : +14155552671
 		                                <br />
-		                                Email : pattyb@kovair.com
+		                                Email : scottallen@kovair.com
 		                            </div>
 		                        </div>
 		                            <div class="well well-sm">
