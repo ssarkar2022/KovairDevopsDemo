@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Dashboard</title>
+<title>Employee Portal</title>
 <script src="scripts/angular.js"></script>
 <link rel="stylesheet" href="css/bootstrap.css" type="text/css" />
 <link rel="stylesheet" href="css/main.css" type="text/css" />
@@ -75,7 +75,7 @@
 		                            </div>
 		                    </div>
 		                </div>
-		                <div class="panel panel-info">
+		                <!-- <div class="panel panel-info">
 		                    <div class="panel-heading myHeading">Employee Leave Balance</div>
 		                    <div id="Leave-Basic-Div" class="panel-body">
 		                       
@@ -87,7 +87,7 @@
 		                       
 		                           Available RH : 2.00 &nbsp;&nbsp;		                          
 		                    </div>
-		                </div>
+		                </div> -->
 		            </div>
 		        </div>
 		    </div>
