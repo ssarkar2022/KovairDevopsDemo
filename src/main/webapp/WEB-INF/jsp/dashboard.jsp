@@ -39,7 +39,7 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><span class="glyphicon glyphicon-user"></span>Hello Patty Brown</a></li>
+                <li><a href="#"><span class="fas fa-user-alt"></span>Hello Scott Allen</a></li>
                 <li><a href="." id="logoutClick"  class="btn btn-link btn-md">Log Out</a></li>
             </ul>
         </div>
