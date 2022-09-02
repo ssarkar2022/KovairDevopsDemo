@@ -87,8 +87,8 @@
 		                           Available EL : 14.56&nbsp;&nbsp;&nbsp;&nbsp;
 		                       
 		                           Available RH : 2.00 &nbsp;&nbsp;		                          
-		                    </div> -->
-		                </div>
+		                    </div>
+		                </div> -->
 		            </div>
 		        </div>
 		    </div>
