@@ -77,7 +77,7 @@
 		                    </div>
 		                </div>
 		                <div class="panel panel-info">
-		                    <div class="panel-heading myHeading">Employee Leave Balance</div>
+		                    <div class="panel-heading myHeading">My Leave Balance</div>
 		                    <div id="Leave-Basic-Div" class="panel-body">
 		                       
 		                           Available CL : 1.25 &nbsp;&nbsp;&nbsp;&nbsp;
