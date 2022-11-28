@@ -5,9 +5,9 @@
   include_tasks: copy_war.yml
   when: kovairdevops_state == "present"
 
-# - name: Copy Certificate KeyStoreFile
-#   include_tasks: copy_keystore_file.yml
-#   when: kovairdevops_state == "present"
+- name: Copy Certificate KeyStoreFile
+  include_tasks: copy_keystore_file.yml
+  when: kovairdevops_state == "present"
 
 # - name: Create Database
 #   include: create_db.yml

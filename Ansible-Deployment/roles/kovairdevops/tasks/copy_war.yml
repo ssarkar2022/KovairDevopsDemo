@@ -9,3 +9,9 @@
     group: "{{ tomcat_group }}"
   register: war_copy_result
   notify: restart tomcat
+
+- name: DevOps Instance Details
+  debug:
+    msg:
+      - "Instance URL: https://{{ url_value }}.devops.kovair.com"
+      - "Application username/password: admin/admin"
