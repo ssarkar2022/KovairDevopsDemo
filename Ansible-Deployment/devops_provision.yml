@@ -6,6 +6,6 @@
   roles:
    - tomcat
    - kovairdevops
-  # vars:
-  #   db_server_hostname: "{{groups['DBServerPrivateIP'][0]}}"
-  #   certificate_keystore_password: "rY5Ve4NC1qTKPIZ"
+  vars:
+    #db_server_hostname: "{{groups['DBServerPrivateIP'][0]}}"
+    certificate_keystore_password: "rY5Ve4NC1qTKPIZ"
