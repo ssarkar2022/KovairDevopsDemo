@@ -1,0 +1,10 @@
+---
+# tasks file for kovairdevops-ansible-role
+
+- name: Create Database
+  mysql_db:
+    name: "{{ database }}"
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    state: present
+  no_log: true

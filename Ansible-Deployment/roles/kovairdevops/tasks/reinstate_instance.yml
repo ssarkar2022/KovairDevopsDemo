@@ -1,0 +1,12 @@
+---
+# tasks file for kovairdevops-ansible-role
+
+- name: Reinstate Instance
+  community.mysql.mysql_query:
+    login_user: "root"
+    login_password: "{{ mysql_root_password }}"
+    login_db: "{{ database }}"
+    query:
+      - UPDATE tuser SET status = 'Y' where id=2;
+  no_log: true
+  when: create_user

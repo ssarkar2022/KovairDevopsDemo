@@ -1,0 +1,11 @@
+---
+# tasks file for kovairdevops-ansible-role
+
+- name: Copy Kovair DevOps war file at WebApps
+  copy:
+    src: "{{ file_application_war }}"
+    dest: "{{ tomcat_install_path }}/KovairDevOps/apache-tomcat-{{ tomcat_version }}/webapps/ROOT.war"
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group }}"
+  register: war_copy_result
+  notify: restart tomcat

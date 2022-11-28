@@ -1,0 +1,12 @@
+devops.datasource.url=jdbc\:mariadb\://{{ db_server_hostname }}\:3306/{{ database }}?autoReconnect\=true&createDatabaseIfNotExist\=false
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+AuthType=
+DBName={{ database }}
+DBIdentifier=
+DBCreated=Y
+devops.datasource.username=root
+DBServerUrl=jdbc\:mariadb\://{{ db_server_hostname }}\:3306/
+spring.jpa.database-platform=org.hibernate.dialect.MySQL5InnoDBDialect
+restart-needed=Y
+DBType=MARIADB
+devops.datasource.password={{ mysql_root_password_encrypted }}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="ALL">
+        <Appenders>
+                <RollingFile name="rollingFile"
+                        fileName="{{ agent_install_path }}/KovairDevOps/{{ agent_service_folder }}/Logs/KovairDevOpsAgent/KovairDevOpsAgent.log"
+                        filePattern="{{ agent_install_path }}/KovairDevOps/{{ agent_service_folder }}/Logs/KovairDevOpsAgent/KovairDevOpsAgent.%d{dd-MMM}.log.zip"
+                        ignoreExceptions="true">
+                        <PatternLayout>
+                                <Pattern>%-5p %d  (%F:%L) - %m%n</Pattern>
+                        </PatternLayout>
+                        <Policies>
+                                <SizeBasedTriggeringPolicy size="10 MB" />
+                        </Policies>
+                        <DefaultRolloverStrategy max="5" />
+                </RollingFile>
+        </Appenders>
+        <Loggers>
+        <Root level="{{ agent_log_level }}">
+            <AppenderRef ref="rollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>

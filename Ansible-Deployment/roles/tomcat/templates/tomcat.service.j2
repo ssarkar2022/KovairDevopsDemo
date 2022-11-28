@@ -1,0 +1,19 @@
+# Systemd unit file for tomcat
+[Unit]
+Description=Apache Tomcat Web Application Container
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+Environment=CATALINA_HOME={{ tomcat_install_path }}/KovairDevOps/{{ tomcat_service_name }}
+Environment=CATALINA_BASE={{ tomcat_install_path }}/KovairDevOps/{{ tomcat_service_name }}
+
+ExecStart={{ tomcat_install_path }}/KovairDevOps/{{ tomcat_service_name }}/bin/startup.sh
+ExecStop={{ tomcat_install_path }}/KovairDevOps/{{ tomcat_service_name }}/bin/shutdown.sh
+
+User={{ tomcat_user_service }}
+Group={{ tomcat_group_service }}
+
+[Install]
+WantedBy=multi-user.target

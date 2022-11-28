@@ -1,0 +1,18 @@
+---
+
+galaxy_info:
+  author: Sajjad Ali
+  description: Ansible role to install and configure Apache Tomcat on RHEL/CentOS/Ubuntu
+  company: kovair software
+  license: GPLv2
+  min_ansible_version: 2.3
+  platforms:
+  - name: RHEL/CentOS
+    versions:
+     - 7
+     - 8
+  - name: Ubuntu
+    versions:
+     - 18
+  galaxy_tags: [java, web, system, tomcat]
+dependencies: []

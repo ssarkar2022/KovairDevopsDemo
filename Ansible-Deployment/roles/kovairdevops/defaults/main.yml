@@ -1,0 +1,70 @@
+---
+# defaults file for kovairdevops-ansible-role
+
+kovairdevops_state: present
+file_application_war: "KovairDevOps.war"
+files_agent_service: "LinuxServiceInstaller.tar.gz"
+files_license_module: "License_Module"
+file_help_data: "help_data.sql"
+file_db_backup: "boomi_db.sql"
+
+temp_path: "/tmp"
+
+disable_default_agent: true
+create_db: true
+restore_db: false
+database: "KovairDevOpsDB"
+
+mysql_root_password_encrypted: "PrA7TpkzJdrCyzmD5k3UKw=="
+mysql_root_password: "K0v@ir@5620"
+tomcat_install_path: /opt
+tomcat_version: 8.5.78
+tomcat_port_connector: 8080
+tomcat_user: tomcat
+tomcat_group: tomcat
+tomcat_service_name: tomcat
+certificate_keystore_file: "STAR_devops_kovair_com.jks"
+
+create_user: true
+encrypted_email: ""
+user_email: ""
+user_first_name: ""
+api_token: "d1d5dad1-ec76-4dc2-8899-6d122a8d582b"
+header: "Content-Type: text/plain"
+e_tag: "ETag: {{ api_token }}"
+
+devops_temp_path: /tmp/devopstempdir
+apply_license: true
+reapply_license: false
+change_plan: false
+license_duration: 1
+license_user_count: 2
+
+devops_admin_password_encrypted: "PrA7TpkzJdrCyzmD5k3UKw=="
+agent_install_java: true
+agent_java_version: 1.8
+
+agent_java_packages_RedHat:
+ - {package: "java-{{ agent_java_version }}{% if '1.' in agent_java_version|string %}.0{% endif %}-openjdk"}
+ 
+agent_java_packages_Debian:
+ - {package: "openjdk-{{ tomcat_version.split('.')[0] }}-jdk"}
+
+deploy_agent: true
+agent_install_path: /opt
+agent_service_folder: "LinuxServiceInstaller"
+agent_service_name: "KovairDevOpsAgentService"
+pid_path_name: /tmp/{{ agent_service_name }}-pid
+agent_log_level: "ERROR"
+is_default_host: true
+
+url_value: "productiontest"
+suspend_instance: false
+reinstate_instance: false
+upgrade_app: false
+
+devops_db_prop_template: "hibernate-db.properties.j2"
+license_config_template: "AppConfig.ini.j2"
+agent_service_executable_template: "kovairagentservice.sh.j2"
+agent_service_config_template: "configuration.ini.j2"
+agent_log_config_template: "log4j2.xml.j2"

@@ -1,0 +1,48 @@
+---
+# tasks file for kovairdevops-ansible-role
+
+- name: Copy Kovair DevOps War File
+  include_tasks: copy_war.yml
+  when: kovairdevops_state == "present"
+
+# - name: Copy Certificate KeyStoreFile
+#   include_tasks: copy_keystore_file.yml
+#   when: kovairdevops_state == "present"
+
+# - name: Create Database
+#   include: create_db.yml
+#   when: kovairdevops_state == "present" and create_db
+#   delegate_to: "{{groups['DBServer'][0]}}"
+
+# - name: Restore Database
+#   include: restore_db.yml
+#   when: kovairdevops_state == "present" and restore_db
+#   delegate_to: "{{groups['DBServer'][0]}}"
+
+# - name: Setup DB Properties
+#   include_tasks: setup_db_properties.yml
+#   when: kovairdevops_state == "present"
+
+# - name: Agent Service Deployment
+#   include_tasks: deploy_agent_service.yml
+#   when: kovairdevops_state == "present" and deploy_agent
+
+# - name: Insert Help Data
+#   include: insert_help_data.yml
+#   when: kovairdevops_state == "present"
+#   delegate_to: "{{groups['DBServer'][0]}}"
+
+# - name: Disable Default Agent For Plugins
+#   include: setup_plugins_nodefaultagent.yml
+#   when: kovairdevops_state == "present" and disable_default_agent
+#   delegate_to: "{{groups['DBServer'][0]}}"
+
+# - name: Create User
+#   include: create_user.yml
+#   when: kovairdevops_state == "present" and create_user
+#   delegate_to: "{{groups['DBServer'][0]}}"
+
+# - name: License Deployment
+#   include: deploy_license.yml
+#   when: kovairdevops_state == "present" and apply_license
+#   delegate_to: "{{groups['DBServer'][0]}}"

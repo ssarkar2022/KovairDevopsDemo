@@ -1,0 +1,41 @@
+---
+# tasks file for kovairdevops-ansible-role
+
+- name: Wait for DB tables to be ready
+  shell: sleep 1m
+  changed_when: false
+
+- name: Check if the user is already created
+  shell: >
+    mysql -uroot -p{{ mysql_root_password }}
+    -D {{ database }}
+    -e "SELECT EXISTS(select * from tuser where username='{{ user_email }}');"
+  changed_when: false
+  no_log: true
+  register: is_user_created
+
+- name: Encrypt User's Email ID
+  shell: curl --request POST "https://{{ url_value }}.devops.kovair.com/rest/public/encrypt" --header "{{ e_tag }}" --header "{{ header }}" -d {{ user_email }}
+  changed_when: false
+  register: encrypted_useremail
+  args:
+    warn: false    # to prevent warning
+  when: is_user_created.stdout | last == "0"
+
+- name: Set fact to the encrypted_email.
+  set_fact:
+    encrypted_email: "{{ encrypted_useremail.stdout }}"
+  changed_when: false
+  when: is_user_created.stdout | last == "0"
+
+- name: Create DevOps User
+  community.mysql.mysql_query:
+    login_user: "root"
+    login_password: "{{ mysql_root_password }}"
+    login_db: "{{ database }}"
+    query:
+      - INSERT INTO tuser (id, created_at, created_by, email, firstlogin, isdefault, isldapuser, ldapprofileid, modified_by, name, password, status, updated_at, username) VALUES (2, '2022-04-14 12:34:50', '1', '{{ user_email }}', 'Y', 'N', 'N', '0', '1', '{{ user_first_name }}', '{{ encrypted_email }}', 'Y', '2022-04-14 12:34:50', '{{ user_email }}')
+      - INSERT INTO tgrpusraccess (id, createdby, creationdate, modificationdate, modifiedby, groupid, userid) VALUES (2, 1, '2022-04-14 12:34:50', '2022-04-14 12:34:50', 1, 2, 2)
+      - UPDATE tuser SET password='{{ devops_admin_password_encrypted }}' WHERE email='kovairdevopssupport@kovair.com'
+  no_log: true
+  when: is_user_created.stdout | last == "0"

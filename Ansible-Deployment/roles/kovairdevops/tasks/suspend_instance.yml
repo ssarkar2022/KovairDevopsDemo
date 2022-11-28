@@ -1,0 +1,11 @@
+---
+# tasks file for kovairdevops-ansible-role
+
+- name: Suspend Instance
+  community.mysql.mysql_query:
+    login_user: "root"
+    login_password: "{{ mysql_root_password }}"
+    login_db: "{{ database }}"
+    query:
+      - UPDATE tuser SET status = 'N' where username NOT IN ('admin');
+  no_log: true

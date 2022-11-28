@@ -1,0 +1,16 @@
+---
+# tasks file for kovairdevops-ansible-role
+
+- name: "Copy database dump file"
+  copy:
+    src: "{{ file_db_backup }}"
+    dest: "{{ temp_path }}"
+
+- name: Restore database
+  mysql_db:
+    name: "{{ database }}"
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    state: import
+    target: "{{ temp_path }}/{{file_db_backup}}"
+  no_log: true

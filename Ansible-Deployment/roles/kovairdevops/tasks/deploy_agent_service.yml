@@ -1,0 +1,67 @@
+---
+# tasks file for kovairdevops-ansible-role
+
+- name: Install Java on RedHat
+  yum:
+    name: "{{ item.package }}"
+    state: present
+  with_items: "{{ agent_java_packages_RedHat }}"
+  when: agent_install_java and ansible_os_family=='RedHat'
+
+- name: Install Java on Debian
+  apt:
+    name: "{{ item.package }}"
+    state: present
+  with_items: "{{ agent_java_packages_Debian }}"
+  when: agent_install_java and ansible_os_family=='Debian'
+
+- name: Check if {{ agent_service_folder }} is already deployed
+  stat:
+    path: "{{ agent_install_path }}/KovairDevOps/{{ agent_service_folder }}"
+  register: is_agent_deployed
+
+- name: Copy Agent Service files to {{ agent_install_path }}/KovairDevOps
+  copy:
+    src: "{{ files_agent_service }}"
+    dest: "{{ agent_install_path }}/KovairDevOps/"
+  when: not is_agent_deployed.stat.exists
+
+- name: Unarchive {{ files_agent_service }} at {{ agent_install_path }}/KovairDevOps
+  unarchive:
+    src: "{{ agent_install_path }}/KovairDevOps/{{ files_agent_service }}"
+    dest: "{{ agent_install_path }}/KovairDevOps"
+    remote_src: true
+  when: not is_agent_deployed.stat.exists
+
+- name: Remove {{ files_agent_service }} archived folder
+  file:
+    path: '{{ agent_install_path }}/KovairDevOps/{{ files_agent_service }}'
+    state: absent
+  changed_when: False
+  when: not is_agent_deployed.stat.exists
+
+- name: Configure service file kovairagentservice.sh
+  template:
+    src: "{{ agent_service_executable_template }}"
+    dest: "{{ agent_install_path }}/KovairDevOps/{{ agent_service_folder }}/kovairagentservice.sh"
+
+- name: Set up configuration.ini file
+  template:
+    src: "{{ agent_service_config_template }}"
+    dest: "{{ agent_install_path }}/KovairDevOps/{{ agent_service_folder }}/configuration.ini"
+  register: agent_service_config_result
+
+- name: Set up log4j2.xml file
+  template:
+    src: "{{ agent_log_config_template }}"
+    dest: "{{ agent_install_path }}/KovairDevOps/{{ agent_service_folder }}/log4j2.xml"
+
+- name: Set permissions
+  include_tasks: set_permissions.yml
+
+- name: Start Agent Service
+  shell: if [ ! -f {{ pid_path_name }} ]; then sh kovairagentservice.sh start; else sh kovairagentservice.sh restart; fi
+  args:
+    chdir: "{{ agent_install_path }}/KovairDevOps/{{ agent_service_folder }}"
+    warn: false
+  when: agent_service_config_result.changed == true

@@ -1,0 +1,11 @@
+---
+- hosts: AppServer
+  user: ansible
+  become: true
+  connection: ssh
+  roles:
+   - tomcat
+   - kovairdevops
+  # vars:
+  #   db_server_hostname: "{{groups['DBServerPrivateIP'][0]}}"
+  #   certificate_keystore_password: "rY5Ve4NC1qTKPIZ"

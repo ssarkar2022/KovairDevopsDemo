@@ -1,0 +1,19 @@
+---
+# tasks file for kovairdevops-ansible-role
+
+- name: Check Whether Application Directory Exists or Not
+  shell: >
+    while :; do if [ -d "{{ tomcat_install_path }}/KovairDevOps/apache-tomcat-{{ tomcat_version }}/webapps/ROOT/WEB-INF/classes/" ]; then echo "Directory exists." ; break; else echo "Error: Directory does not exist."; fi; sleep 5; done
+  changed_when: false
+
+- name: Set DB properties
+  template:
+    src: "{{ devops_db_prop_template }}"
+    dest: "{{ tomcat_install_path }}/KovairDevOps/apache-tomcat-{{ tomcat_version }}/webapps/ROOT/WEB-INF/classes/hibernate-db.properties"
+  register: db_prop_result
+
+- name: restart tomcat
+  systemd:
+    name: "{{ tomcat_service_name }}"
+    state: restarted
+  when: db_prop_result.changed == true

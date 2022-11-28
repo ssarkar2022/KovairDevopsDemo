@@ -1,0 +1,22 @@
+---
+# tasks file for kovairdevops-ansible-role
+
+- name: Remove ROOT.war file from webapps folder
+  file:
+    path: "{{ tomcat_install_path }}/KovairDevOps/apache-tomcat-{{ tomcat_version }}/webapps/ROOT.war"
+    state: absent
+  when: upgrade_app
+
+- name: Remove ROOT directory from webapps folder
+  file:
+    path: "{{ tomcat_install_path }}/KovairDevOps/apache-tomcat-{{ tomcat_version }}/webapps/ROOT"
+    state: absent
+  when: upgrade_app
+
+- name: Copy Kovair DevOps War File
+  include_tasks: copy_war.yml
+  when: upgrade_app
+
+- name: Setup DB Properties
+  include_tasks: setup_db_properties.yml
+  when: upgrade_app

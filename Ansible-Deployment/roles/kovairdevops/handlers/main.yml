@@ -1,0 +1,7 @@
+---
+# handlers file for kovairdevops-ansible-role
+
+- name: restart tomcat
+  systemd:
+    name: "{{ tomcat_service_name }}"
+    state: restarted

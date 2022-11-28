@@ -1,0 +1,82 @@
+---
+# tasks file for kovairdevops-ansible-role
+
+- name: Install Java on RedHat
+  yum:
+    name: "{{ item.package }}"
+    state: present
+  with_items: "{{ agent_java_packages_RedHat }}"
+  when: ansible_os_family=='RedHat'
+
+- name: Install Java on Debian
+  apt:
+    name: "{{ item.package }}"
+    state: present
+  with_items: "{{ agent_java_packages_Debian }}"
+  when: ansible_os_family=='Debian'
+
+- name: Check if License is already applied to KovairDevOps instance.
+  shell: >
+    mysql -uroot -p{{ mysql_root_password }}
+    -D {{ database }}
+    -e "SELECT EXISTS(SELECT * from tsysprop);"
+  changed_when: false
+  no_log: true
+  register: is_license_applied
+
+- name: Create temp directory
+  file:
+    path: "{{ devops_temp_path }}"
+    state: directory
+  changed_when: false
+  when: is_license_applied.stdout | last == "0" or reapply_license
+
+- name: Copy License files to {{ devops_temp_path }} directory
+  copy:
+    src: "{{ files_license_module }}"
+    dest: "{{ devops_temp_path }}"
+    owner: ansible
+    group: ansible
+    mode: 0544
+  changed_when: false
+  when: is_license_applied.stdout | last == "0" or reapply_license
+
+- name: Copy License config file to {{ devops_temp_path }} directory
+  template:
+    src: "{{ license_config_template }}"
+    dest: "{{ devops_temp_path }}/{{ files_license_module }}/Config/AppConfig.ini"
+    owner: ansible
+    group: ansible
+    mode: 0544
+  changed_when: false
+  when: is_license_applied.stdout | last == "0" or reapply_license
+
+- name: Deactivate Users
+  community.mysql.mysql_query:
+    login_user: "root"
+    login_password: "{{ mysql_root_password }}"
+    login_db: "{{ database }}"
+    query:
+      - UPDATE tuser SET status = 'N' where id NOT IN (1,2 );
+  no_log: true
+  when: create_user and change_plan
+
+- name: Deploy license
+  command: java -jar KovairDevOpsAutoLicenseGenerator.jar {{ db_server_hostname }} {{ database }} "https://{{ url_value }}.devops.kovair.com"
+  args:
+    chdir: "{{ devops_temp_path }}/{{ files_license_module }}"
+    warn: false
+  when: is_license_applied.stdout | last == "0" or reapply_license
+
+- name: Clean up temporary files
+  file:
+    path: '{{ devops_temp_path }}'
+    state: absent
+  changed_when: false
+
+- name: DevOps Instance Details
+  debug:
+    msg:
+      - "KovairDevOps Instance URL: https://{{ url_value }}.devops.kovair.com"
+      - "KovairDevOps Application username/password: {{ user_email }}/{{ user_email }}"
+      - "****************** Please change your password after first login ******************"

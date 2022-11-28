@@ -1,0 +1,6 @@
+Baseurl=https://{{ url_value }}.devops.kovair.com
+Username=admin
+Password={{ devops_admin_password_encrypted }}
+IsDefaultHost={% if is_default_host  %}Y{% else %}N{% endif %}{{''}}
+TickTimeinSecond=10
+AppStreamingThreshold=5

@@ -1,0 +1,18 @@
+---
+# tasks file for kovairdevops-ansible-role
+
+- name: Copy Help Data File at {{ temp_path }}
+  copy:
+    src: "{{ file_help_data }}"
+    dest: "{{ temp_path }}"
+
+- name: Execute Help Data Query
+  shell: >
+    mysql -uroot -p{{ mysql_root_password }} -D {{ database }} < {{ temp_path }}/{{ file_help_data }}
+  no_log: true
+
+- name: Remove {{ file_help_data }} From {{ temp_path }}
+  file:
+    path: "{{ temp_path }}/{{ file_help_data }}"
+    state: absent
+  changed_when: false

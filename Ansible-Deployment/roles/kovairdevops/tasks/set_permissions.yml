@@ -1,0 +1,19 @@
+---
+# tasks file for kovairdevops-ansible-role
+
+- name: Set owner and group for agent service installation
+  file:
+    path: "{{ agent_install_path }}/KovairDevOps/{{ agent_service_folder }}"
+    owner: root
+    group: root
+    recurse: true
+    state: directory
+
+- name: Set files and directories permissions for agent service installation
+  file:
+    path: "{{ agent_install_path }}/KovairDevOps/{{ agent_service_folder }}"
+    owner: root
+    group: root
+    mode: 0764
+    recurse: true
+    state: directory
