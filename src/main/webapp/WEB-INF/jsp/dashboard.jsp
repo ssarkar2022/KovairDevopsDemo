@@ -76,7 +76,7 @@
 		                            </div>
 		                    </div>
 		                </div>
-		                 <div class="panel panel-info">
+		                <!-- <div class="panel panel-info">
 		                    <div class="panel-heading myHeading">My Leave Balance</div>
 		                    <div id="Leave-Basic-Div" class="panel-body">
 		                       
@@ -88,7 +88,7 @@
 		                       
 		                           Available RH : 2.00 &nbsp;&nbsp;		                          
 		                    </div>
-		                </div> 
+		                </div> -->
 		            </div>
 		        </div>
 		    </div>
