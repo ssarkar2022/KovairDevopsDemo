@@ -31,7 +31,7 @@
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Leave<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Apply Leave</a></li>
+                        <li><a href="#">Apply Leaves</a></li>
                         <li><a href="#">Leave Status</a></li>
                         <li><a href="#">Leave Balance</a></li>
                     </ul>
