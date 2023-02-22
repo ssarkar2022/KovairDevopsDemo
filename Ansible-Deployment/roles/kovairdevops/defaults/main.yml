@@ -2,7 +2,7 @@
 # defaults file for kovairdevops-ansible-role
 
 kovairdevops_state: present
-file_application_war: "/home/kovair/jile_demo/target/DevOpsDemoApplication.war"
+file_application_war: "/home/kovair/employee_portal/master/target/DevOpsDemoApplication.war"
 files_agent_service: "LinuxServiceInstaller.tar.gz"
 files_license_module: "License_Module"
 file_help_data: "help_data.sql"
