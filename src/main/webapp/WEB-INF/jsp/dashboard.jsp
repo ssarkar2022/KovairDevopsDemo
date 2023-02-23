@@ -64,7 +64,7 @@
 		                                <br />
 		                                Date of Joining : Delivery
 		                                <br />
-		                                Supervisor : Somesh Roy
+		                                Supervisor : Somesh Ch Roy
 		                                <br />
 		                                Contact No : +14155552671
 		                                <br />
